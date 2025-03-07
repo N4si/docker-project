@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My System Monitoring Dashboard</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f2f2f2;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .metrics-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .metric-box {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            width: 25%;
+            min-width: 220px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 10px;
+        }
+
+        .metric-box h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        /* The <meter> element acts like a mini-gauge bar */
+        meter {
+            width: 100%;
+            height: 20px;
+        }
+
+        /* Example of styling <meter> for different thresholds */
+        meter::-webkit-meter-bar {
+            background: #e0e0e0;
+        }
+        meter::-webkit-meter-optimum-value {
+            background: #28a745;
+        }
+        meter::-webkit-meter-suboptimal-value {
+            background: #ffc107;
+        }
+        meter::-webkit-meter-even-less-good-value {
+            background: #dc3545;
+        }
+
+        .last-updated {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: #555;
+        }
+    </style>
+    <script>
+        function fetchMetrics() {
+            fetch('/metrics')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('time').innerText = data.time;
+                    
+                    // Update text values
+                    document.getElementById('cpuValue').innerText = data.cpu + '%';
+                    document.getElementById('memoryValue').innerText = data.memory + '%';
+                    document.getElementById('diskValue').innerText = data.disk + '%';
+
+                    // Update the meter gauges
+                    document.getElementById('cpuMeter').value = data.cpu;
+                    document.getElementById('memoryMeter').value = data.memory;
+                    document.getElementById('diskMeter').value = data.disk;
+                })
+                .catch(err => console.error('Error fetching metrics:', err));
+        }
+
+        // Fetch updated metrics every 5 seconds
+        setInterval(fetchMetrics, 5000);
+
+        // Fetch once on page load
+        window.onload = fetchMetrics;
+    </script>
+</head>
+<body>
+    <h1>Updated System Monitoring Dashboard</h1>
+    <div class="container">
+        <div class="metrics-container">
+            <div class="metric-box">
+                <h2>CPU Usage</h2>
+                <div class="metric-value" id="cpuValue">{{ metrics.cpu }}%</div>
+                <meter id="cpuMeter" min="0" max="100" value="{{ metrics.cpu }}"></meter>
+            </div>
+            <div class="metric-box">
+                <h2>Memory Usage</h2>
+                <div class="metric-value" id="memoryValue">{{ metrics.memory }}%</div>
+                <meter id="memoryMeter" min="0" max="100" value="{{ metrics.memory }}"></meter>
+            </div>
+            <div class="metric-box">
+                <h2>Disk Usage</h2>
+                <div class="metric-value" id="diskValue">{{ metrics.disk }}%</div>
+                <meter id="diskMeter" min="0" max="100" value="{{ metrics.disk }}"></meter>
+            </div>
+        </div>
+        <div class="last-updated">
+            Last Updated: <span id="time">{{ metrics.time }}</span>
+        </div>
+    </div>
+</body>
+</html>
