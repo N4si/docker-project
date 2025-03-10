@@ -11,6 +11,23 @@ This project demonstrates how to efficiently use **Docker** to boost productivit
 - **Docker Build Cloud** (Faster builds)
 - **Testcontainers** (Automated testing in isolated environments)
 
++---------------------------------------------------------+
+|                      Docker Client                     |
+|  (CLI, GUI, API)                                       |
++--------------------------+-----------------------------+
+|      Docker Daemon       |      REST API Server        |
+|  (dockerd)               |  (Handles Requests)         |
++--------------------------+-----------------------------+
+|    Image Management      |     Container Runtime       |
+|  (Build, Pull, Push)     |  (Run, Stop, Restart)       |
++--------------------------+-----------------------------+
+|         Storage          |       Networking            |
+|  (Volumes, Bind Mounts)  |  (Bridges, Overlay)        |
++---------------------------------------------------------+
+|                Linux Kernel / Windows OS               |
++---------------------------------------------------------+
+
+
 ## 📌 Prerequisites
 - Install **[Docker Desktop](https://www.docker.com/products/docker-desktop/)**
 - Install **Python 3.9+**
