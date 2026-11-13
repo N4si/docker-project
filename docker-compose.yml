@@ -1,0 +1,26 @@
+
+services:
+  web:
+    build: .
+    ports:
+      - "5001:5001"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+      - FLASK_RUN_HOST=0.0.0.0
+      - FLASK_RUN_PORT=5001
+    depends_on:
+      - redis
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+    command: flask run
+
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
